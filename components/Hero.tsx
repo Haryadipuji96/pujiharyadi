@@ -47,6 +47,21 @@ export function Hero() {
     return () => clearTimeout(timer)
   }, [typedText, textIndex, isDeleting, speed])
 
+  useEffect(() => {
+    // Initialize AOS (Animate On Scroll)
+    if (typeof window !== 'undefined') {
+      // Dynamically import AOS
+      import('aos').then((AOS) => {
+        AOS.default.init({
+          duration: 600,
+          easing: 'ease-in-out',
+          once: false,
+          mirror: true
+        });
+      });
+    }
+  }, []);
+
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -56,7 +71,9 @@ export function Hero() {
       <div className="max-w-4xl mx-auto w-full text-center">
         
         {/* Profile Image - SAMA PERSIS UKURAN DAN POSISINYA */}
-        <div className="w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 p-1">
+        <div className="w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 p-1"
+             data-aos="zoom-in"
+             data-aos-delay="100">
           <div className="w-full h-full rounded-full bg-white overflow-hidden">
             {/* Ganti bagian ini dengan foto Anda */}
             <img
@@ -80,14 +97,18 @@ export function Hero() {
         </div>
 
         {/* Title & Typing - TETAP SAMA */}
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4"
+            data-aos="fade-up"
+            data-aos-delay="200">
           Halo, saya{' '}
           <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
             Puji Haryadi
           </span>
         </h1>
         
-        <div className="h-12 mb-6">
+        <div className="h-12 mb-6"
+             data-aos="fade-up"
+             data-aos-delay="300">
           <h2 className="text-2xl md:text-3xl text-gray-700">
             Seorang <span className="text-blue-600 font-semibold">{typedText}</span>
             <span className={`inline-block w-[3px] h-8 ml-1 ${isDeleting ? 'bg-gray-400' : 'bg-blue-600'} animate-pulse`}></span>
@@ -95,7 +116,9 @@ export function Hero() {
         </div>
 
         {/* Description - TETAP SAMA */}
-        <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-8">
+        <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-8"
+           data-aos="fade-up"
+           data-aos-delay="400">
           Membangun aplikasi web modern dengan React, Next.js, dan teknologi terkini.
           Fokus pada performa, UX yang baik, dan code yang clean.
         </p>
@@ -105,6 +128,8 @@ export function Hero() {
           <button
             onClick={() => scrollTo('contact')}
             className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-full hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2 group"
+            data-aos="fade-up"
+            data-aos-delay="500"
           >
             Hubungi Saya
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -113,41 +138,56 @@ export function Hero() {
           <button
             onClick={() => scrollTo('projects')}
             className="px-8 py-3 bg-white text-blue-600 border-2 border-blue-600 font-semibold rounded-full hover:bg-blue-50 hover:shadow-lg transition-all"
+            data-aos="fade-up"
+            data-aos-delay="600"
           >
             Lihat Proyek
           </button>
         </div>
 
-        {/* Social Links - TETAP SAMA */}
+        {/* Social Links - TETAP SAMA (Dikomentari) */}
         {/* <div className="flex justify-center gap-6 mb-12">
           <a
             href="https://github.com/Haryadipuji96"
             target="_blank"
             rel="noopener noreferrer"
             className="w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-md hover:shadow-xl transition-all hover:scale-110 text-gray-600 hover:text-gray-900"
+            data-aos="zoom-in"
+            data-aos-delay="700"
           >
             <Github size={24} />
           </a>
           <a
             href="#"
             className="w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-md hover:shadow-xl transition-all hover:scale-110 text-gray-600 hover:text-blue-700"
+            data-aos="zoom-in"
+            data-aos-delay="800"
           >
             <Linkedin size={24} />
           </a>
           <a
             href="mailto:email@anda.com"
             className="w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-md hover:shadow-xl transition-all hover:scale-110 text-gray-600 hover:text-red-600"
+            data-aos="zoom-in"
+            data-aos-delay="900"
           >
             <Mail size={24} />
           </a>
         </div> */}
 
         {/* Tech Stack - TETAP SAMA */}
-        <div className="mb-12">
+        <div className="mb-12"
+             data-aos="fade-up"
+             data-aos-delay="700">
           <p className="text-gray-500 mb-4">Tech yang saya gunakan:</p>
           <div className="flex flex-wrap justify-center gap-3">
-            {['Next.js', 'React', 'TypeScript', 'Tailwind', 'Node.js', 'MongoDB'].map((tech) => (
-              <span key={tech} className="px-4 py-2 bg-gray-100 rounded-full text-gray-700 text-sm hover:bg-blue-100 hover:text-blue-700 transition-colors">
+            {['Next.js', 'React', 'TypeScript', 'Tailwind', 'Node.js', 'MongoDB'].map((tech, index) => (
+              <span 
+                key={tech} 
+                className="px-4 py-2 bg-gray-100 rounded-full text-gray-700 text-sm hover:bg-blue-100 hover:text-blue-700 transition-colors"
+                data-aos="zoom-in"
+                data-aos-delay={800 + (index * 50)}
+              >
                 {tech}
               </span>
             ))}
@@ -158,6 +198,8 @@ export function Hero() {
         <button
           onClick={() => scrollTo('about')}
           className="animate-bounce text-blue-600 hover:text-cyan-500 transition-colors"
+          data-aos="fade-up"
+          data-aos-delay="1100"
         >
           <ChevronDown size={32} />
         </button>
@@ -166,8 +208,12 @@ export function Hero() {
 
       {/* Background Effects - TETAP SAMA */}
       <div className="fixed inset-0 -z-10 pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30"></div>
-        <div className="absolute bottom-20 right-10 w-64 h-64 bg-cyan-100 rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute top-20 left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30"
+             data-aos="fade-right"
+             data-aos-delay="1200"></div>
+        <div className="absolute bottom-20 right-10 w-64 h-64 bg-cyan-100 rounded-full blur-3xl opacity-30"
+             data-aos="fade-left"
+             data-aos-delay="1300"></div>
       </div>
     </section>
   )

@@ -1,7 +1,7 @@
 'use client'
 
 import { Code, Database, Palette, Server, Terminal, Cloud, Cpu, Smartphone, Wrench, Users, BookOpen, BarChart } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const skillCategories = [
   {
@@ -76,27 +76,54 @@ export function Skills() {
   const [activeCategory, setActiveCategory] = useState(0)
   const [hoveredSkill, setHoveredSkill] = useState<number | null>(null)
 
+  useEffect(() => {
+    // Initialize AOS (Animate On Scroll)
+    if (typeof window !== 'undefined') {
+      // Dynamically import AOS
+      import('aos').then((AOS) => {
+        AOS.default.init({
+          duration: 600,
+          easing: 'ease-in-out',
+          once: false,
+          mirror: true
+        });
+      });
+    }
+  }, []);
+
   return (
     <section id="skills" className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full blur-3xl opacity-30"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tr from-cyan-100 to-blue-100 rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full blur-3xl opacity-30"
+             data-aos="fade-right"
+             data-aos-delay="100"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tr from-cyan-100 to-blue-100 rounded-full blur-3xl opacity-30"
+             data-aos="fade-left"
+             data-aos-delay="200"></div>
       </div>
 
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 mb-6 shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 mb-6 shadow-lg"
+               data-aos="zoom-in"
+               data-aos-delay="100">
             <Code className="w-10 h-10 text-white" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4"
+              data-aos="fade-up"
+              data-aos-delay="200">
             <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
               Keahlian Teknis
             </span>
           </h2>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto mb-6 rounded-full"></div>
-          <p className="text-gray-600 max-w-3xl mx-auto text-lg md:text-xl">
+          <div className="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto mb-6 rounded-full"
+               data-aos="fade-up"
+               data-aos-delay="300"></div>
+          <p className="text-gray-600 max-w-3xl mx-auto text-lg md:text-xl"
+             data-aos="fade-up"
+             data-aos-delay="400">
             Spesialis dalam teknologi web modern dengan pengalaman luas di berbagai stack.
             Terus belajar dan mengembangkan skill untuk memberikan hasil terbaik.
           </p>
@@ -114,6 +141,8 @@ export function Skills() {
                     ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg scale-105'
                     : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-gray-50 border border-gray-200'
                 }`}
+                data-aos="fade-up"
+                data-aos-delay={500 + (index * 50)}
               >
                 <div className={`p-2 rounded-lg ${activeCategory === index ? 'bg-white/20' : 'bg-blue-50'}`}>
                   {category.icon}
@@ -127,11 +156,15 @@ export function Skills() {
         {/* Skills Grid for Active Category */}
         <div className="mb-16">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
+            <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-3"
+                data-aos="fade-right"
+                data-aos-delay="900">
               {skillCategories[activeCategory].icon}
               {skillCategories[activeCategory].category}
             </h3>
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-gray-500"
+                 data-aos="fade-left"
+                 data-aos-delay="900">
               {skillCategories[activeCategory].skills.length} Skill
             </div>
           </div>
@@ -143,6 +176,8 @@ export function Skills() {
                 className="group relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-gray-200"
                 onMouseEnter={() => setHoveredSkill(index)}
                 onMouseLeave={() => setHoveredSkill(null)}
+                data-aos="fade-up"
+                data-aos-delay={1000 + (index * 100)}
               >
                 {/* Skill Header */}
                 <div className="flex justify-between items-start mb-4">

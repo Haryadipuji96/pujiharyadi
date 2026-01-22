@@ -1,7 +1,7 @@
 'use client'
 
 import { ExternalLink, Github, Star, Eye, Code2, Rocket, ArrowUpRight, FolderOpen } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // Data yang sudah dikoreksi
 export const projects = [
@@ -234,6 +234,21 @@ export function Projects() {
   const [activeCategory, setActiveCategory] = useState('Semua')
   const [hoveredProject, setHoveredProject] = useState<number | null>(null)
 
+  useEffect(() => {
+    // Initialize AOS (Animate On Scroll)
+    if (typeof window !== 'undefined') {
+      // Dynamically import AOS
+      import('aos').then((AOS) => {
+        AOS.default.init({
+          duration: 600,
+          easing: 'ease-in-out',
+          once: false,
+          mirror: true
+        });
+      });
+    }
+  }, []);
+
   const filteredProjects = activeCategory === 'Semua' 
     ? projects 
     : activeCategory === 'Laravel' 
@@ -248,23 +263,35 @@ export function Projects() {
     <section id="projects" className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full blur-3xl opacity-30 animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-tr from-cyan-100 to-blue-100 rounded-full blur-3xl opacity-30 animate-pulse delay-1000"></div>
+        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full blur-3xl opacity-30 animate-pulse"
+             data-aos="fade-right"
+             data-aos-delay="100"></div>
+        <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-tr from-cyan-100 to-blue-100 rounded-full blur-3xl opacity-30 animate-pulse delay-1000"
+             data-aos="fade-left"
+             data-aos-delay="200"></div>
       </div>
 
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 mb-6 shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 mb-6 shadow-lg"
+               data-aos="zoom-in"
+               data-aos-delay="100">
             <Code2 className="w-10 h-10 text-white" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4"
+              data-aos="fade-up"
+              data-aos-delay="200">
             <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
               Proyek Saya
             </span>
           </h2>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto mb-6 rounded-full"></div>
-          <p className="text-gray-600 max-w-3xl mx-auto text-lg md:text-xl">
+          <div className="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto mb-6 rounded-full"
+               data-aos="fade-up"
+               data-aos-delay="300"></div>
+          <p className="text-gray-600 max-w-3xl mx-auto text-lg md:text-xl"
+             data-aos="fade-up"
+             data-aos-delay="400">
             Koleksi proyek yang telah saya kerjakan, mencakup berbagai teknologi dan solusi inovatif.
           </p>
         </div>
@@ -272,7 +299,7 @@ export function Projects() {
         {/* Category Filter - Mobile Responsive */}
         <div className="mb-10">
           <div className="flex overflow-x-auto pb-4 gap-2 scrollbar-hide mb-6">
-            {projectCategories.map((category) => (
+            {projectCategories.map((category, index) => (
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
@@ -281,6 +308,8 @@ export function Projects() {
                     ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg'
                     : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                 }`}
+                data-aos="fade-up"
+                data-aos-delay={500 + (index * 50)}
               >
                 {category}
                 {category !== 'Semua' && (
@@ -296,11 +325,15 @@ export function Projects() {
           </div>
           
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600"
+                 data-aos="fade-right"
+                 data-aos-delay="900">
               Menampilkan <span className="font-semibold text-blue-600">{filteredProjects.length}</span> dari{' '}
               <span className="font-semibold">{projects.length}</span> proyek
             </div>
-            <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600">
+            <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600"
+                 data-aos="fade-left"
+                 data-aos-delay="900">
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500"></div>
                 <span>Featured</span>
@@ -323,6 +356,8 @@ export function Projects() {
               } hover:-translate-y-2`}
               onMouseEnter={() => setHoveredProject(index)}
               onMouseLeave={() => setHoveredProject(null)}
+              data-aos="fade-up"
+              data-aos-delay={1000 + (index % 3 * 100)}
             >
               {/* Featured Badge */}
               {project.featured && (
@@ -380,12 +415,16 @@ export function Projects() {
                     <span
                       key={techIndex}
                       className="px-3 py-1 bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-600 rounded-full text-xs font-medium border border-blue-100"
+                      data-aos="zoom-in"
+                      data-aos-delay={1200 + (techIndex * 50)}
                     >
                       {tech}
                     </span>
                   ))}
                   {project.technologies.length > 3 && (
-                    <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
+                    <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium"
+                          data-aos="zoom-in"
+                          data-aos-delay="1350">
                       +{project.technologies.length - 3}
                     </span>
                   )}
@@ -399,6 +438,8 @@ export function Projects() {
                       className="flex items-center gap-2 text-blue-600 hover:text-cyan-500 transition-colors group/link"
                       target="_blank"
                       rel="noopener noreferrer"
+                      data-aos="fade-right"
+                      data-aos-delay="1400"
                     >
                       <ExternalLink className="w-4 h-4" />
                       <span className="text-sm font-medium group-hover/link:underline">Demo</span>
@@ -408,13 +449,17 @@ export function Projects() {
                       className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors group/link"
                       target="_blank"
                       rel="noopener noreferrer"
+                      data-aos="fade-right"
+                      data-aos-delay="1450"
                     >
                       <Github className="w-4 h-4" />
                       <span className="text-sm font-medium group-hover/link:underline">Code</span>
                     </a>
                   </div>
                   
-                  <button className="text-gray-400 hover:text-blue-600 transition-colors">
+                  <button className="text-gray-400 hover:text-blue-600 transition-colors"
+                          data-aos="fade-left"
+                          data-aos-delay="1500">
                     <ArrowUpRight className="w-5 h-5" />
                   </button>
                 </div>
@@ -425,7 +470,9 @@ export function Projects() {
 
         {/* Empty State */}
         {filteredProjects.length === 0 && (
-          <div className="text-center py-16">
+          <div className="text-center py-16"
+               data-aos="fade-up"
+               data-aos-delay="1000">
             <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
               <FolderOpen className="w-10 h-10 text-gray-400" />
             </div>
@@ -438,13 +485,17 @@ export function Projects() {
 
         {/* Call to Action */}
         <div className="text-center">
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-gray-600 mb-8 max-w-2xl mx-auto"
+             data-aos="fade-up"
+             data-aos-delay="1100">
             Tertarik dengan proyek saya? Saya selalu terbuka untuk kolaborasi atau diskusi tentang proyek baru.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <button
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-full hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2"
+              data-aos="zoom-in"
+              data-aos-delay="1200"
             >
               <Rocket className="w-5 h-5" />
               Diskusikan Proyek
@@ -454,6 +505,8 @@ export function Projects() {
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-3 bg-white text-blue-600 border-2 border-blue-600 font-semibold rounded-full hover:bg-blue-50 transition-all hover:shadow-lg flex items-center gap-2"
+              data-aos="zoom-in"
+              data-aos-delay="1300"
             >
               <Github className="w-5 h-5" />
               Lihat GitHub
@@ -463,25 +516,33 @@ export function Projects() {
           {/* Statistics */}
           <div className="mt-12 pt-8 border-t border-gray-200">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto">
-              <div className="text-center">
+              <div className="text-center"
+                   data-aos="fade-up"
+                   data-aos-delay="1400">
                 <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                   {projects.length}
                 </div>
                 <div className="text-sm text-gray-600">Total Proyek</div>
               </div>
-              <div className="text-center">
+              <div className="text-center"
+                   data-aos="fade-up"
+                   data-aos-delay="1450">
                 <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                   {projects.filter(p => p.featured).length}
                 </div>
                 <div className="text-sm text-gray-600">Featured</div>
               </div>
-              <div className="text-center">
+              <div className="text-center"
+                   data-aos="fade-up"
+                   data-aos-delay="1500">
                 <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                   9
                 </div>
                 <div className="text-sm text-gray-600">Teknologi</div>
               </div>
-              <div className="text-center">
+              <div className="text-center"
+                   data-aos="fade-up"
+                   data-aos-delay="1550">
                 <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                   100%
                 </div>

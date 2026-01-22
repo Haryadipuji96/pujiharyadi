@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Home, User, Code2, Briefcase, GraduationCap, Mail, Sparkles, ChevronRight } from 'lucide-react'
+import { Home, User, Code2, Briefcase, GraduationCap, Mail, Sparkles } from 'lucide-react'
 
 const menuItems = [
   { name: 'Home', href: '#home', icon: <Home className="w-4 h-4" /> },
@@ -18,11 +18,25 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [isMobile, setIsMobile] = useState(false) // State untuk detect mobile
   const mobileMenuRef = useRef<HTMLDivElement>(null)
-  const lastScrollY = useRef(0)
-  const [isVisible, setIsVisible] = useState(true)
 
-  // Handle scroll effect dengan glassmorphism
+  // Detect mobile on client side only
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    // Initial check
+    checkIfMobile()
+    
+    // Add resize listener
+    window.addEventListener('resize', checkIfMobile)
+    
+    return () => window.removeEventListener('resize', checkIfMobile)
+  }, [])
+
+  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
@@ -32,15 +46,7 @@ export function Navbar() {
       const progress = (currentScrollY / scrollHeight) * 100
       setScrollProgress(Math.min(progress, 100))
       
-      // Deteksi scroll untuk show/hide navbar
-      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-        setIsVisible(false) // Hide navbar saat scroll down
-      } else {
-        setIsVisible(true) // Show navbar saat scroll up
-      }
-      lastScrollY.current = currentScrollY
-      
-      // Glassmorphism effect berdasarkan scroll position
+      // Glassmorphism effect saat scroll
       setIsScrolled(currentScrollY > 20)
       
       // Update active section
@@ -49,7 +55,7 @@ export function Navbar() {
         const element = document.getElementById(section)
         if (element) {
           const rect = element.getBoundingClientRect()
-          return rect.top <= 150 && rect.bottom >= 150
+          return rect.top <= 100 && rect.bottom >= 100
         }
         return false
       })
@@ -59,7 +65,6 @@ export function Navbar() {
       }
     }
 
-    // Only add event listener on client side
     window.addEventListener('scroll', handleScroll, { passive: true })
     
     // Initial check
@@ -89,19 +94,6 @@ export function Navbar() {
     }
   }, [isMobileMenuOpen])
 
-  // Prevent body scroll when menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isMobileMenuOpen])
-
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href)
     if (element) {
@@ -113,55 +105,55 @@ export function Navbar() {
     }
   }
 
+  // Navbar background style - FIXED untuk hydration
+  const getNavbarBackground = () => {
+    // Default untuk SSR - hanya background putih
+    // Client-side nanti akan di-update oleh useEffect
+    if (!isMobile && isScrolled) {
+      // Desktop dengan glassmorphism saat scroll
+      return 'bg-gradient-to-b from-blue-600/5 via-blue-500/5 to-cyan-500/5 backdrop-blur-xl shadow-lg'
+    } else if (isMobile) {
+      // Mobile: selalu background putih
+      return isScrolled ? 'bg-white shadow-lg' : 'bg-white shadow-sm'
+    }
+    // Default untuk SSR dan desktop tidak discroll
+    return 'bg-white md:bg-transparent'
+  }
+
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 transform ${
-          isVisible ? 'translate-y-0' : '-translate-y-full'
-        } ${
-          isScrolled 
-            ? 'bg-gradient-to-b from-blue-600/5 via-blue-500/5 to-cyan-500/5 backdrop-blur-xl shadow-lg' 
-            : 'bg-transparent'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${getNavbarBackground()}`}
         style={{
-          background: isScrolled 
-            ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(6, 182, 212, 0.05) 100%)' 
-            : 'transparent',
-          backdropFilter: isScrolled ? 'blur(16px)' : 'none',
-          WebkitBackdropFilter: isScrolled ? 'blur(16px)' : 'none',
-          borderBottom: isScrolled ? '1px solid rgba(59, 130, 246, 0.1)' : 'none',
+          borderBottom: isScrolled ? '1px solid rgba(59, 130, 246, 0.1)' : '1px solid rgba(0, 0, 0, 0.05)',
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
+          <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <button
               onClick={() => scrollToSection('#home')}
               className="flex items-center gap-3 group"
             >
-              <div className={`relative w-10 h-10 rounded-xl transition-all duration-500 ${
+              <div className={`relative w-10 h-10 rounded-xl transition-all duration-300 ${
                 isScrolled 
-                  ? 'bg-gradient-to-br from-blue-600/30 to-cyan-500/20 backdrop-blur-sm' 
+                  ? 'bg-gradient-to-br from-blue-600 to-cyan-500 shadow-md'
                   : 'bg-gradient-to-br from-blue-600 to-cyan-500'
               }`}>
-                <div className={`absolute inset-0 rounded-xl flex items-center justify-center ${
-                  isScrolled 
-                    ? 'bg-gradient-to-br from-blue-600/40 to-cyan-500/30' 
-                    : ''
-                }`}>
-                  <Code2 className={`w-5 h-5 ${isScrolled ? 'text-white' : 'text-white'}`} />
+                <div className={`absolute inset-0 rounded-xl flex items-center justify-center`}>
+                  <Code2 className="w-5 h-5 text-white" />
                 </div>
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/10 to-transparent"></div>
               </div>
               <div className="text-left">
-                <div className={`text-xl font-bold transition-all duration-500 ${
+                <div className={`text-xl font-bold transition-all duration-300 ${
                   isScrolled 
                     ? 'bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent' 
                     : 'bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent'
                 }`}>
                   Puji Haryadi
                 </div>
-                <div className={`text-xs transition-all duration-500 ${
+                <div className={`text-xs transition-all duration-300 ${
                   isScrolled ? 'text-blue-500/80' : 'text-gray-500 group-hover:text-blue-600'
                 }`}>
                   Portfolio
@@ -169,8 +161,8 @@ export function Navbar() {
               </div>
             </button>
 
-            {/* Desktop Menu - BLUE THEME saat scroll */}
-            <div className={`hidden md:flex items-center space-x-1 rounded-2xl px-2 py-2 transition-all duration-500 ${
+            {/* Desktop Menu */}
+            <div className={`hidden md:flex items-center space-x-1 rounded-2xl px-2 py-2 transition-all duration-300 ${
               isScrolled 
                 ? 'bg-gradient-to-r from-blue-50/20 to-cyan-50/10 backdrop-blur-md border border-blue-200/30' 
                 : 'bg-white/30 backdrop-blur-sm'
@@ -209,146 +201,139 @@ export function Navbar() {
               ))}
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button dengan Animasi Burger */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`md:hidden relative w-12 h-12 flex items-center justify-center rounded-xl transition-all duration-300 ${
                 isMobileMenuOpen 
-                  ? 'bg-gradient-to-br from-blue-600 to-cyan-500 text-white' 
-                  : isScrolled
-                    ? 'bg-gradient-to-r from-blue-50/20 to-cyan-50/10 backdrop-blur-md text-blue-700 border border-blue-200/30 hover:bg-blue-50/40'
-                    : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-blue-50'
-              } shadow-lg`}
+                  ? 'bg-gradient-to-br from-blue-600 to-cyan-500' 
+                  : 'bg-white border border-gray-200 hover:border-blue-300'
+              } shadow-sm`}
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             >
+              {/* Animated Burger Icon */}
               <div className="relative w-6 h-6">
                 <span
                   className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-0.5 w-6 bg-current transition-all duration-300 ${
-                    isMobileMenuOpen ? 'rotate-45' : '-translate-y-2'
-                  }`}
+                    isMobileMenuOpen ? 'rotate-45 translate-y-0' : '-translate-y-2'
+                  } ${isMobileMenuOpen ? 'bg-white' : 'bg-gray-700'}`}
                 />
                 <span
                   className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-0.5 w-6 bg-current transition-all duration-300 ${
                     isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
-                  }`}
+                  } ${isMobileMenuOpen ? 'bg-white' : 'bg-gray-700'}`}
                 />
                 <span
                   className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-0.5 w-6 bg-current transition-all duration-300 ${
-                    isMobileMenuOpen ? '-rotate-45' : 'translate-y-2'
-                  }`}
+                    isMobileMenuOpen ? '-rotate-45 translate-y-0' : 'translate-y-2'
+                  } ${isMobileMenuOpen ? 'bg-white' : 'bg-gray-700'}`}
                 />
               </div>
-              <div className={`absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500/5 to-transparent ${
-                isScrolled && !isMobileMenuOpen ? 'opacity-30' : 'opacity-0'
-              }`}></div>
             </button>
           </div>
         </div>
+
+        {/* Scroll Progress Bar */}
+        <div className={`h-1 transition-opacity duration-300 ${
+          isScrolled ? 'opacity-100' : 'opacity-0'
+        }`}>
+          <div 
+            className="h-full bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600"
+            style={{
+              width: `${scrollProgress}%`,
+              transition: 'width 0.2s ease-out',
+            }}
+          />
+        </div>
       </nav>
 
-      {/* Mobile Menu Overlay dengan Blue Theme */}
+      {/* Mobile Menu Overlay */}
       <div
-        className={`md:hidden fixed inset-0 z-40 transition-all duration-500 ${
+        className={`md:hidden fixed inset-0 z-40 transition-all duration-300 ${
           isMobileMenuOpen
             ? 'opacity-100 visible'
             : 'opacity-0 invisible'
         }`}
       >
-        {/* Backdrop */}
+        {/* Backdrop dengan animasi fade */}
         <div 
-          className={`absolute inset-0 transition-all duration-500 ${
+          className={`absolute inset-0 transition-all duration-300 ${
             isMobileMenuOpen 
-              ? 'bg-gradient-to-br from-blue-900/70 via-blue-800/50 to-cyan-900/30 backdrop-blur-lg' 
+              ? 'bg-black/40 backdrop-blur-sm' 
               : 'bg-transparent'
           }`}
           onClick={() => setIsMobileMenuOpen(false)}
         />
 
-        {/* Menu Panel dengan Blue Glassmorphism */}
+        {/* Menu Panel dengan animasi slide */}
         <div
           ref={mobileMenuRef}
-          className={`absolute top-20 right-4 left-4 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 transform ${
+          className={`absolute top-16 right-4 left-4 bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 transform ${
             isMobileMenuOpen
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 -translate-y-10'
           }`}
-          style={{
-            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%)',
-            border: '1px solid rgba(59, 130, 246, 0.2)',
-          }}
         >
-          {/* Blue Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-cyan-500/5 to-blue-600/5"></div>
-          
-          {/* Menu Content */}
-          <div className="relative z-10">
-            {/* Menu Header */}
-            <div className="p-6 border-b border-blue-400/20">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg">
-                  <Code2 className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-blue-900">Navigasi</div>
-                  <div className="text-sm text-blue-700/70">Pilih bagian</div>
-                </div>
+          {/* Menu Header */}
+          <div className="p-6 bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                <Code2 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <div className="text-lg font-bold">Menu Navigasi</div>
+                <div className="text-sm opacity-90">Pilih bagian untuk langsung scroll</div>
               </div>
             </div>
+          </div>
 
-            {/* Menu Items */}
-            <div className="p-2 max-h-[60vh] overflow-y-auto">
-              {menuItems.map((item, index) => (
-                <button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className={`w-full flex items-center gap-3 px-4 py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] mb-2 ${
+          {/* Menu Items */}
+          <div className="p-4 max-h-[60vh] overflow-y-auto">
+            {menuItems.map((item, index) => (
+              <button
+                key={item.name}
+                onClick={() => scrollToSection(item.href)}
+                className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-200 mb-2 hover:scale-[1.02] active:scale-[0.98] ${
+                  activeSection === item.href.substring(1)
+                    ? 'bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 text-blue-700'
+                    : 'text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                  activeSection === item.href.substring(1)
+                    ? 'bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-600'
+                }`}>
+                  {item.icon}
+                </div>
+                <div className="text-left flex-1">
+                  <div className={`font-medium ${
                     activeSection === item.href.substring(1)
-                      ? 'bg-gradient-to-r from-blue-500/20 to-cyan-400/10 border border-blue-300/30'
-                      : 'hover:bg-blue-500/10'
-                  }`}
-                  style={{
-                    animationDelay: `${index * 50}ms`,
-                  }}
-                >
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                    activeSection === item.href.substring(1)
-                      ? 'bg-gradient-to-br from-blue-600 to-cyan-500 text-white'
-                      : 'bg-blue-500/10 text-blue-700'
+                      ? 'text-blue-800'
+                      : 'text-gray-800'
                   }`}>
-                    {item.icon}
+                    {item.name}
                   </div>
-                  <div className="text-left flex-1">
-                    <div className={`font-medium ${
-                      activeSection === item.href.substring(1)
-                        ? 'text-blue-800'
-                        : 'text-blue-900/90'
-                    }`}>
-                      {item.name}
-                    </div>
-                    <div className="text-xs text-blue-700/60">
-                      Klik untuk navigasi
-                    </div>
-                  </div>
-                  <ChevronRight className={`w-4 h-4 transition-transform ${
-                    activeSection === item.href.substring(1)
-                      ? 'text-blue-600'
-                      : 'text-blue-700/60'
-                  }`} />
-                </button>
-              ))}
-            </div>
+                </div>
+                <div className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                  activeSection === item.href.substring(1)
+                    ? 'bg-gradient-to-r from-blue-600 to-cyan-500'
+                    : 'bg-gray-300'
+                }`} />
+              </button>
+            ))}
 
-            {/* Menu Footer */}
-            <div className="p-4 border-t border-blue-400/20">
+            {/* Contact Button */}
+            <div className="mt-6 p-4 border-t border-gray-100">
               <button
                 onClick={() => scrollToSection('#contact')}
-                className="w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 active:scale-95 mb-2"
+                className="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 active:scale-[0.98] shadow-md"
               >
                 Hubungi Saya
               </button>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="w-full py-3 text-blue-700/80 hover:text-blue-800 transition-colors text-sm"
+                className="w-full mt-3 py-3 text-gray-600 hover:text-gray-800 transition-colors text-sm font-medium"
               >
                 Tutup Menu
               </button>
@@ -357,54 +342,32 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Custom Scroll Indicator */}
-      <div className={`fixed top-0 left-0 right-0 h-1 z-50 transition-opacity duration-500 ${
-        isScrolled ? 'opacity-100' : 'opacity-0'
-      }`}>
-        <div 
-          className="h-full bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600"
-          style={{
-            width: `${scrollProgress}%`,
-            transition: 'width 0.3s ease-out',
-          }}
-        />
-      </div>
-
       {/* Custom CSS */}
       <style jsx global>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        /* Smooth scroll behavior */
+        html {
+          scroll-behavior: smooth;
+          scroll-padding-top: 64px;
+        }
+
+        /* Body padding untuk kompensasi fixed navbar */
+        body {
+          padding-top: 64px;
         }
 
         /* Custom scrollbar untuk mobile menu */
-        .overflow-y-auto {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(59, 130, 246, 0.3) transparent;
-        }
-
         .overflow-y-auto::-webkit-scrollbar {
           width: 4px;
         }
 
         .overflow-y-auto::-webkit-scrollbar-track {
-          background: transparent;
+          background: #f1f1f1;
+          border-radius: 2px;
         }
 
         .overflow-y-auto::-webkit-scrollbar-thumb {
           background-color: rgba(59, 130, 246, 0.3);
           border-radius: 2px;
-        }
-
-        /* Smooth scroll behavior */
-        html {
-          scroll-behavior: smooth;
         }
 
         /* Selection color dengan blue theme */

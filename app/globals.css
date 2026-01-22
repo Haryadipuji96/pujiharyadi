@@ -1,5 +1,6 @@
 /* app/globals.css */
 @import 'tailwindcss';
+@import 'aos/dist/aos.css';
 
 @layer base {
   html {

@@ -1,7 +1,7 @@
 'use client'
 
 import { GraduationCap, Award, Calendar, BookOpen, Trophy, Users, Target, ChevronRight } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const education = [
   {
@@ -107,27 +107,54 @@ export function Education() {
   const [activeTab, setActiveTab] = useState<'education' | 'certifications' | 'future'>('education')
   const [expandedCert, setExpandedCert] = useState<number | null>(null)
 
+  useEffect(() => {
+    // Initialize AOS (Animate On Scroll)
+    if (typeof window !== 'undefined') {
+      // Dynamically import AOS
+      import('aos').then((AOS) => {
+        AOS.default.init({
+          duration: 600,
+          easing: 'ease-in-out',
+          once: false,
+          mirror: true
+        });
+      });
+    }
+  }, []);
+
   return (
     <section id="education" className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full blur-3xl opacity-30"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-cyan-100 to-blue-100 rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full blur-3xl opacity-30"
+             data-aos="fade-left"
+             data-aos-delay="100"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-cyan-100 to-blue-100 rounded-full blur-3xl opacity-30"
+             data-aos="fade-right"
+             data-aos-delay="200"></div>
       </div>
 
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 mb-6 shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 mb-6 shadow-lg"
+               data-aos="zoom-in"
+               data-aos-delay="100">
             <GraduationCap className="w-10 h-10 text-white" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4"
+              data-aos="fade-up"
+              data-aos-delay="200">
             <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
               Pendidikan & Pengembangan
             </span>
           </h2>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto mb-6 rounded-full"></div>
-          <p className="text-gray-600 max-w-3xl mx-auto text-lg md:text-xl">
+          <div className="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto mb-6 rounded-full"
+               data-aos="fade-up"
+               data-aos-delay="300"></div>
+          <p className="text-gray-600 max-w-3xl mx-auto text-lg md:text-xl"
+             data-aos="fade-up"
+             data-aos-delay="400">
             Perjalanan pendidikan dan pengembangan diri saya dalam dunia teknologi informasi.
           </p>
         </div>
@@ -142,6 +169,8 @@ export function Education() {
                   ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg'
                   : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
               }`}
+              data-aos="fade-up"
+              data-aos-delay="500"
             >
               <BookOpen className="w-5 h-5" />
               Pendidikan
@@ -153,6 +182,8 @@ export function Education() {
                   ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg'
                   : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
               }`}
+              data-aos="fade-up"
+              data-aos-delay="600"
             >
               <Award className="w-5 h-5" />
               Sertifikasi
@@ -164,6 +195,8 @@ export function Education() {
                   ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg'
                   : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
               }`}
+              data-aos="fade-up"
+              data-aos-delay="700"
             >
               <Target className="w-5 h-5" />
               Rencana Masa Depan
@@ -178,6 +211,8 @@ export function Education() {
               <div
                 key={index}
                 className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-200 hover:-translate-y-1"
+                data-aos="fade-up"
+                data-aos-delay={800 + (index * 200)}
               >
                 <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
                   {/* Left - Logo and Basic Info */}
@@ -206,8 +241,12 @@ export function Education() {
                   <div className="lg:w-2/3">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
                       <div>
-                        <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">{edu.degree}</h3>
-                        <div className="flex items-center gap-3 text-gray-600 mb-4">
+                        <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-2"
+                            data-aos="fade-up"
+                            data-aos-delay="100">{edu.degree}</h3>
+                        <div className="flex items-center gap-3 text-gray-600 mb-4"
+                             data-aos="fade-up"
+                             data-aos-delay="200">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4" />
                             <span className="text-sm">{edu.period}</span>
@@ -219,25 +258,31 @@ export function Education() {
                         </div>
                       </div>
                       {edu.degree.includes('D3') && (
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full text-blue-700 font-medium mb-4 sm:mb-0">
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full text-blue-700 font-medium mb-4 sm:mb-0"
+                             data-aos="fade-left"
+                             data-aos-delay="300">
                           <Users className="w-4 h-4" />
                           <span className="text-sm">Biro IT 2 LCC</span>
                         </div>
                       )}
                     </div>
 
-                    <p className="text-gray-600 mb-6">{edu.description}</p>
+                    <p className="text-gray-600 mb-6"
+                       data-aos="fade-up"
+                       data-aos-delay="400">{edu.description}</p>
 
                     <div className="grid md:grid-cols-2 gap-6">
                       {/* Achievements */}
-                      <div>
+                      <div data-aos="fade-right" data-aos-delay="500">
                         <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
                           <Award className="w-5 h-5 text-blue-500" />
                           Prestasi & Aktivitas
                         </h4>
                         <ul className="space-y-3">
                           {edu.achievements.map((achievement, i) => (
-                            <li key={i} className="flex items-start gap-3">
+                            <li key={i} className="flex items-start gap-3"
+                                data-aos="fade-right"
+                                data-aos-delay={600 + (i * 50)}>
                               <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full mt-2 flex-shrink-0"></div>
                               <span className="text-gray-600 text-sm md:text-base">{achievement}</span>
                             </li>
@@ -246,7 +291,7 @@ export function Education() {
                       </div>
 
                       {/* Courses */}
-                      <div>
+                      <div data-aos="fade-left" data-aos-delay="700">
                         <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
                           <BookOpen className="w-5 h-5 text-cyan-500" />
                           Mata Kuliah/Pelajaran
@@ -256,6 +301,8 @@ export function Education() {
                             <span
                               key={i}
                               className="px-3 py-1.5 bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-600 rounded-lg text-sm"
+                              data-aos="zoom-in"
+                              data-aos-delay={800 + (i * 50)}
                             >
                               {course}
                             </span>
@@ -269,25 +316,41 @@ export function Education() {
             ))}
 
             {/* Educational Journey */}
-            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100">
+            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100"
+                 data-aos="fade-up"
+                 data-aos-delay="1000">
               <h4 className="text-xl font-bold text-gray-800 mb-4">Perjalanan Pendidikan</h4>
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div className="text-center">
+                <div className="text-center"
+                     data-aos="zoom-in"
+                     data-aos-delay="1100">
                   <div className="text-3xl font-bold text-blue-600">2024</div>
                   <div className="text-gray-700">Mulai D3 MI</div>
                 </div>
-                <ChevronRight className="w-6 h-6 text-gray-400 rotate-90 md:rotate-0" />
-                <div className="text-center">
+                <ChevronRight className="w-6 h-6 text-gray-400 rotate-90 md:rotate-0"
+                             data-aos="fade-in"
+                             data-aos-delay="1200" />
+                <div className="text-center"
+                     data-aos="zoom-in"
+                     data-aos-delay="1300">
                   <div className="text-3xl font-bold text-blue-600">2023</div>
                   <div className="text-gray-700">Lulus SMA</div>
                 </div>
-                <ChevronRight className="w-6 h-6 text-gray-400 rotate-90 md:rotate-0" />
-                <div className="text-center">
+                <ChevronRight className="w-6 h-6 text-gray-400 rotate-90 md:rotate-0"
+                             data-aos="fade-in"
+                             data-aos-delay="1400" />
+                <div className="text-center"
+                     data-aos="zoom-in"
+                     data-aos-delay="1500">
                   <div className="text-3xl font-bold text-blue-600">2021</div>
                   <div className="text-gray-700">Masuk SMA</div>
                 </div>
-                <ChevronRight className="w-6 h-6 text-gray-400 rotate-90 md:rotate-0" />
-                <div className="text-center">
+                <ChevronRight className="w-6 h-6 text-gray-400 rotate-90 md:rotate-0"
+                             data-aos="fade-in"
+                             data-aos-delay="1600" />
+                <div className="text-center"
+                     data-aos="zoom-in"
+                     data-aos-delay="1700">
                   <div className="text-3xl font-bold text-blue-600">2012</div>
                   <div className="text-gray-700">Mulai SD</div>
                 </div>
@@ -300,8 +363,12 @@ export function Education() {
         {activeTab === 'certifications' && (
           <div>
             <div className="mb-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">Sertifikasi & Seminar</h3>
-              <p className="text-gray-600">Koleksi sertifikasi dan seminar yang telah saya ikuti selama studi di LP3I.</p>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2"
+                  data-aos="fade-up"
+                  data-aos-delay="500">Sertifikasi & Seminar</h3>
+              <p className="text-gray-600"
+                 data-aos="fade-up"
+                 data-aos-delay="600">Koleksi sertifikasi dan seminar yang telah saya ikuti selama studi di LP3I.</p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
@@ -312,6 +379,8 @@ export function Education() {
                     expandedCert === index ? 'ring-2 ring-blue-500' : ''
                   }`}
                   onClick={() => setExpandedCert(expandedCert === index ? null : index)}
+                  data-aos="fade-up"
+                  data-aos-delay={700 + (index * 100)}
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
@@ -347,19 +416,27 @@ export function Education() {
 
             {/* Certification Stats */}
             <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 text-center">
+              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 text-center"
+                   data-aos="fade-up"
+                   data-aos-delay="1300">
                 <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-2">{certifications.length}</div>
                 <p className="text-gray-700 text-sm">Total Sertifikasi</p>
               </div>
-              <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-5 text-center">
+              <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-5 text-center"
+                   data-aos="fade-up"
+                   data-aos-delay="1400">
                 <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-2">6+</div>
                 <p className="text-gray-700 text-sm">Seminar Diikuti</p>
               </div>
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 text-center">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 text-center"
+                   data-aos="fade-up"
+                   data-aos-delay="1500">
                 <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-2">100%</div>
                 <p className="text-gray-700 text-sm">Keaktifan</p>
               </div>
-              <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-5 text-center">
+              <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-5 text-center"
+                   data-aos="fade-up"
+                   data-aos-delay="1600">
                 <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-2">4</div>
                 <p className="text-gray-700 text-sm">Soft Skill Training</p>
               </div>
@@ -371,8 +448,12 @@ export function Education() {
         {activeTab === 'future' && (
           <div>
             <div className="mb-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">Rencana & Target Masa Depan</h3>
-              <p className="text-gray-600">Visi dan misi saya dalam pengembangan karir di bidang teknologi.</p>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2"
+                  data-aos="fade-up"
+                  data-aos-delay="500">Rencana & Target Masa Depan</h3>
+              <p className="text-gray-600"
+                 data-aos="fade-up"
+                 data-aos-delay="600">Visi dan misi saya dalam pengembangan karir di bidang teknologi.</p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 mb-12">
@@ -380,6 +461,8 @@ export function Education() {
                 <div
                   key={index}
                   className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  data-aos="fade-up"
+                  data-aos-delay={700 + (index * 100)}
                 >
                   <div className="text-4xl mb-4">{plan.icon}</div>
                   <h3 className="text-xl font-bold text-gray-800 mb-3">{plan.title}</h3>
@@ -395,31 +478,41 @@ export function Education() {
             </div>
 
             {/* Roadmap */}
-            <div className="bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl p-6 md:p-8 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl p-6 md:p-8 text-white"
+                 data-aos="fade-up"
+                 data-aos-delay="1000">
               <h4 className="text-xl font-bold mb-6">Roadmap Pengembangan Karir</h4>
               <div className="space-y-6">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4"
+                     data-aos="fade-right"
+                     data-aos-delay="1100">
                   <div className="w-3 h-3 bg-white rounded-full"></div>
                   <div>
                     <div className="font-bold">2024 - Sekarang</div>
                     <div className="text-blue-100">Fokus menyelesaikan D3 Manajemen Informatika</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4"
+                     data-aos="fade-right"
+                     data-aos-delay="1200">
                   <div className="w-3 h-3 bg-white rounded-full"></div>
                   <div>
                     <div className="font-bold">2026 - 2027</div>
                     <div className="text-blue-100">Lulus D3 & mulai bekerja sebagai Junior Developer</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4"
+                     data-aos="fade-right"
+                     data-aos-delay="1300">
                   <div className="w-3 h-3 bg-white rounded-full"></div>
                   <div>
                     <div className="font-bold">2027 - 2030</div>
                     <div className="text-blue-100">Melanjutkan S1 & berkembang menjadi Mid-Level Developer</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4"
+                     data-aos="fade-right"
+                     data-aos-delay="1400">
                   <div className="w-3 h-3 bg-white rounded-full"></div>
                   <div>
                     <div className="font-bold">2030+</div>
@@ -432,7 +525,9 @@ export function Education() {
         )}
 
         {/* Call to Action */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-12"
+             data-aos="fade-up"
+             data-aos-delay="1000">
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
             Saya percaya bahwa pendidikan adalah proses berkelanjutan. Saya selalu terbuka untuk 
             belajar hal baru dan mengembangkan diri di bidang teknologi.
@@ -440,6 +535,8 @@ export function Education() {
           <button
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-full hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2 mx-auto"
+            data-aos="zoom-in"
+            data-aos-delay="1100"
           >
             <GraduationCap className="w-5 h-5" />
             Diskusikan Peluang Belajar Bersama

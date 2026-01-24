@@ -3,6 +3,7 @@
 import { Code, Palette, Zap, Sparkles, Rocket, Users, Target, Award, Mail, MapPin, Calendar, Download } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { getVisitorTracker } from '@/lib/visitor-tracker'
 
 // ==================== DATA YANG BISA DIEDIT ====================
 // GANTI URL FOTO DI SINI:
@@ -85,36 +86,47 @@ export function About() {
   }, []);
 
   // Fungsi untuk mengunduh CV
-  const handleDownloadCV = () => {
+  // Fungsi untuk mengunduh CV - UPDATED VERSION
+const handleDownloadCV = async () => {
+  try {
+    setIsDownloading(true)
+    
+    // Track download ke database
     try {
-      setIsDownloading(true)
-      
-      // Buat elemen link untuk download
-      const link = document.createElement('a')
-      link.href = CV_FILE_PATH
-      link.download = CV_FILE_NAME
-      
-      // Tambahkan ke dokumen dan klik otomatis
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      
-      // Feedback ke pengguna
-      setTimeout(() => {
-        setIsDownloading(false)
-        alert('CV berhasil diunduh! Cek folder download Anda.')
-      }, 500)
-      
-    } catch (error) {
-      console.error('Gagal mengunduh CV:', error)
-      setIsDownloading(false)
-      
-      // Fallback - buka di tab baru jika download langsung gagal
-      window.open(CV_FILE_PATH, '_blank')
-      
-      alert('Membuka CV di tab baru... Silakan simpan manual dari browser.')
+      const tracker = getVisitorTracker()
+      await tracker.trackDownload('CV_Puji_Haryadi.pdf')
+      console.log('✅ Download tracked to database')
+    } catch (trackError) {
+      console.warn('⚠️ Could not track download to DB, but continuing:', trackError)
+      // Lanjut download meskipun tracking gagal
     }
+    
+    // Buat elemen link untuk download
+    const link = document.createElement('a')
+    link.href = CV_FILE_PATH
+    link.download = CV_FILE_NAME
+    
+    // Tambahkan ke dokumen dan klik otomatis
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    
+    // Feedback ke pengguna
+    setTimeout(() => {
+      setIsDownloading(false)
+      alert('CV berhasil diunduh! Terima kasih 🙏')
+    }, 500)
+    
+  } catch (error) {
+    console.error('Gagal mengunduh CV:', error)
+    setIsDownloading(false)
+    
+    // Fallback - buka di tab baru jika download langsung gagal
+    window.open(CV_FILE_PATH, '_blank')
+    
+    alert('Membuka CV di tab baru... Silakan simpan manual dari browser.')
   }
+}
 
   return (
     <section id="about" className="relative py-12 md:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">

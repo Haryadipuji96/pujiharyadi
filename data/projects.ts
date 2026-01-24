@@ -227,3 +227,4 @@
 // // Type definitions (optional)
 // export type Project = typeof projects[0];
 // export type ProjectCategory = typeof projectCategories[number];
+

@@ -31,7 +31,7 @@ export function Contact() {
 
   // ========== EDIT DATA ANDA DI SINI ==========
   const YOUR_EMAIL = "fujiharyadi0@gmail.com" // Ganti dengan email Anda
-  const YOUR_PHONE = "+62 85794586552" // Ganti dengan nomor Anda
+  const YOUR_PHONE = "+62 08811787704" // Ganti dengan nomor Anda
   const YOUR_LOCATION = "Tasikmalaya, Jawa Barat"
   const YOUR_NAME = "Pujiharyadi"
   // ========== END EDIT DATA ==========

@@ -85,8 +85,8 @@ export function About() {
     }
   }, []);
 
-  // Fungsi untuk mengunduh CV
-  // Fungsi untuk mengunduh CV - UPDATED VERSION
+  // Di file About.tsx, update handleDownloadCV:
+
 const handleDownloadCV = async () => {
   try {
     setIsDownloading(true)
@@ -94,24 +94,20 @@ const handleDownloadCV = async () => {
     // Track download ke database
     try {
       const tracker = getVisitorTracker()
-      await tracker.trackDownload('CV_Puji_Haryadi.pdf')
+      await tracker.trackDownload('CV_Puji_Haryadi.pdf') // Pastikan nama file sama
       console.log('✅ Download tracked to database')
     } catch (trackError) {
-      console.warn('⚠️ Could not track download to DB, but continuing:', trackError)
-      // Lanjut download meskipun tracking gagal
+      console.warn('⚠️ Could not track download to DB:', trackError)
     }
     
-    // Buat elemen link untuk download
+    // Download file
     const link = document.createElement('a')
     link.href = CV_FILE_PATH
-    link.download = CV_FILE_NAME
-    
-    // Tambahkan ke dokumen dan klik otomatis
+    link.download = `${CV_FILE_NAME}.pdf`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
     
-    // Feedback ke pengguna
     setTimeout(() => {
       setIsDownloading(false)
       alert('CV berhasil diunduh! Terima kasih 🙏')
@@ -120,10 +116,7 @@ const handleDownloadCV = async () => {
   } catch (error) {
     console.error('Gagal mengunduh CV:', error)
     setIsDownloading(false)
-    
-    // Fallback - buka di tab baru jika download langsung gagal
     window.open(CV_FILE_PATH, '_blank')
-    
     alert('Membuka CV di tab baru... Silakan simpan manual dari browser.')
   }
 }

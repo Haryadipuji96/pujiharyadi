@@ -78,7 +78,7 @@ export const projects = [
     description: 'Platform terintegrasi untuk pengelolaan arsip dokumen dan data akademik institusi pendidikan. Fitur pencarian cerdas, digitalisasi dokumen, dan reporting system.',
     technologies: ['Laravel 11', 'MySQL', 'PDF Generation', 'Search Algorithm', 'Bootstrap'],
     image: '📚',
-    liveUrl: '#',
+    liveUrl: 'https://sipanda.iaitasik.ac.id/login',
     githubUrl: 'https://github.com/Haryadipuji96?tab=repositories',
     category: 'Web App',
     featured: true,

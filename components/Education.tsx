@@ -1,6 +1,6 @@
 'use client'
 
-import { GraduationCap, Award, Calendar, BookOpen, Trophy, Users, Target, ChevronRight } from 'lucide-react'
+import { GraduationCap, Award, Calendar, BookOpen, Trophy, Users, Target, ChevronRight, ExternalLink } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 const education = [
@@ -47,38 +47,60 @@ const certifications = [
     year: '2023',
     credential: 'Operator Komputer Level Pemula',
     description: 'Kompetensi dasar dalam operasional komputer dan software office',
+    certificateLink: '/certificates/Opertor Komputer Muda.pdf', // Ganti dengan link Google Drive atau file lokal
   },
   {
-    name: 'Training Soft Skill 1, 2, 3',
+    name: 'Seminar Quantum Of Change',
     issuer: 'Politeknik LP3I',
     year: '2024',
-    credential: 'Pengembangan Karakter Mahasiswa',
-    description: 'Pelatihan pengembangan soft skill dan karakter profesional',
+    credential: 'Competitive Adaptation In An Excellent Change Process',
+    description: 'Seminar tentang adaptasi kompetitif dalam proses perubahan menuju dimensi baru',
+    fullTheme: 'Competitive Adaptation In An Excellent Change Process to New Dimension',
+    certificateLink: '/certificates/Training Soft skil 1.pdf',
+  },
+  {
+    name: 'Seminar Intrapersonal & Interpersonal Communication',
+    issuer: 'Politeknik LP3I',
+    year: '2024',
+    credential: 'Communication Skills Building',
+    description: 'Pengembangan keterampilan komunikasi untuk budaya kerja yang adaptif dan kolaboratif',
+    fullTheme: 'Communication Skills Building Leads to an Adaptive and Collaborative work culture',
+    certificateLink: '/certificates/Training Soft skil 2.pdf',
+  },
+  {
+    name: 'Seminar Public Speaking & Presentation',
+    issuer: 'Politeknik LP3I',
+    year: '2024',
+    credential: 'Sharpening Public Speaking Skills',
+    description: 'Penguatan keterampilan public speaking untuk menghadapi tantangan kompetitif',
+    fullTheme: 'Sharpening Public Speaking Skills to face competitive challenges',
+    certificateLink: '/certificates/Training Soft Skil 3.pdf',
   },
   {
     name: 'Seminar TOEIC Preparation',
     issuer: 'Politeknik LP3I',
     year: '2024',
-    credential: 'Persiapan Tes Bahasa Inggris',
-    description: 'Strategi dan persiapan untuk tes TOEIC',
+    credential: 'Persiapan Tes TOEIC',
+    description: 'Strategi persiapan TOEIC untuk meraih karir impian',
+    fullTheme: 'Pursue Your Dream Career By Preparing TOEIC Test',
+    certificateLink: '/certificates/Tes TOEIC.pdf',
   },
   {
-    name: 'Seminar Mindset Problem Solver',
+    name: 'Seminar Wajib Mahasiswa',
     issuer: 'Politeknik LP3I',
     year: '2024',
-    description: 'Pengembangan pola pikir sebagai problem solver',
+    credential: 'Taking Inspiration as Experience',
+    description: 'Seminar pengembangan diri untuk menghadapi masa depan yang lebih baik',
+    fullTheme: 'Taking Inspiration as Experience to Face a Better Future',
+    certificateLink: '/certificates/Seminar Wajib.pdf',
   },
   {
-    name: 'Seminar Mobile Programming',
-    issuer: 'LP3I Computer Club',
-    year: '2024',
-    description: 'Pengenalan mobile programming di era digitalisasi',
-  },
-  {
-    name: 'Seminar Keterampilan Utama Mahasiswa',
+    name: 'Training Soft Skill - Critical Thinking & Problem Solving',
     issuer: 'Politeknik LP3I',
     year: '2024',
-    description: 'Pengembangan keterampilan esensial untuk mahasiswa',
+    credential: 'Critical Thinking & Problem Solving',
+    description: 'Pelatihan pengembangan kemampuan berpikir kritis dan pemecahan masalah',
+    certificateLink: '/certificates/Training Oft Skil 33.pdf',
   },
 ]
 
@@ -403,10 +425,28 @@ export function Education() {
                     </div>
                   )}
 
+                  {/* BUTTON LIHAT SERTIFIKAT */}
+                  {cert.certificateLink && (
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <a
+                        href={cert.certificateLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-600 rounded-lg hover:from-blue-100 hover:to-cyan-100 transition-all duration-300 w-full justify-center group"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-medium">Lihat Sertifikat</span>
+                      </a>
+                    </div>
+                  )}
+
+                  {/* Info tambahan saat di-expand */}
                   {expandedCert === index && (
                     <div className="mt-4 pt-4 border-t border-gray-100 animate-slideIn">
                       <p className="text-sm text-gray-600">
                         Sertifikat ini merupakan bagian dari pengembangan diri saya selama studi di LP3I.
+                        {cert.credential && ` Saya berhasil meraih ${cert.credential}.`}
                       </p>
                     </div>
                   )}

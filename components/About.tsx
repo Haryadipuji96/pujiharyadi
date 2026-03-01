@@ -3,14 +3,14 @@
 import { Code, Palette, Zap, Sparkles, Rocket, Users, Target, Award, Mail, MapPin, Calendar, Download } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { getVisitorTracker } from '@/lib/visitor-tracker'
+// import { getVisitorTracker } from '@/lib/visitor-tracker'
 
 // ==================== DATA YANG BISA DIEDIT ====================
 // GANTI URL FOTO DI SINI:
-const PROFILE_PHOTO_URL = "/images/Gambarn Saya.jpg" // Ganti dengan path foto Anda
+const PROFILE_PHOTO_URL = "/images/Puji.jpeg" // Ganti dengan path foto Anda
 
 // ===== KONFIGURASI CV (EDIT BAGIAN INI) =====
-const CV_FILE_PATH = "/cv/CV PUJI HARYADI.pdf" // Path ke file CV di folder public/cv/
+const CV_FILE_PATH = "/cv/CV PUJI HARYADI (2).pdf" // Path ke file CV di folder public/cv/
 const CV_FILE_NAME = "CV_Puji_Haryadi" // Nama file yang akan diunduh
 // ===========================================
 
@@ -19,15 +19,20 @@ const ABOUT_DATA = {
   subtitle: "Kenali saya lebih dekat",
   mainTitle: "Membangun Pengalaman Digital yang Berarti",
   description: [
-    "Saya seorang full-stack developer dengan pengalaman lebih dari 3 tahun dalam membangun aplikasi web modern. Perjalanan saya di dunia teknologi dimulai dengan rasa penasaran dan berkembang menjadi karier yang didedikasikan untuk menciptakan solusi digital yang berdampak.",
-    "Saya percaya pada penulisan kode yang bersih, mudah dipelihara, dan mendesain antarmuka pengguna yang intuitif yang tidak hanya terlihat bagus tetapi juga menyelesaikan masalah nyata. Pendekatan saya menggabungkan keahlian teknis dengan pemikiran kreatif untuk memberikan hasil yang luar biasa."
+    "Saya seorang full-stack developer dengan pengalaman lebih dari 3 tahun dalam membangun aplikasi web modern, ditunjang dengan penguasaan Microsoft Office (Excel, Word, PowerPoint) yang mumpuni untuk mendukung kebutuhan operasional dan presentasi. Perjalanan saya di dunia teknologi dimulai dengan rasa penasaran dan berkembang menjadi karier yang didedikasikan untuk menciptakan solusi digital yang berdampak.",
+    
+    "Saya percaya pada penulisan kode yang bersih, mudah dipelihara, dan mendesain antarmuka pengguna yang intuitif. Di luar pemrograman, saya mampu mengolah data kompleks dengan Excel, menyusun dokumen profesional di Word, serta membuat presentasi menarik di PowerPoint untuk mendukung komunikasi tim dan client.",
+    
+    "Kelebihan saya terletak pada kemampuan berkolaborasi dalam tim, bekerja cepat dan efisien, serta mudah beradaptasi dengan teknologi dan tools baru. Pendekatan saya menggabungkan keahlian teknis dengan pemikiran kreatif untuk memberikan hasil yang luar biasa.",
+    
+    "Seperti manusia pada umumnya, saya memiliki kekurangan yaitu mudah lupa terhadap detail-detail kecil. Namun saya telah mengembangkan sistem untuk mengatasinya dengan mencatat setiap instruksi dan pekerjaan yang diberikan secara terstruktur. Saya percaya bahwa mengakui kekurangan dan memiliki solusi atasnya adalah bentuk profesionalisme dan komitmen untuk terus berkembang."
   ],
   // Statistik pencapaian
   stats: [
     { value: "10+", label: "Proyek Selesai", icon: <Rocket className="w-5 h-5" /> },
     { value: "3+", label: "Tahun Pengalaman", icon: <Award className="w-5 h-5" /> },
     { value: "100%", label: "Kepuasan Klien", icon: <Target className="w-5 h-5" /> },
-    { value: "20+", label: "Klien Bahagia", icon: <Users className="w-5 h-5" /> }
+    { value: "5+", label: "Klien Bahagia", icon: <Users className="w-5 h-5" /> }
   ],
   // Keahlian/Keunggulan
   features: [
@@ -90,17 +95,6 @@ export function About() {
 const handleDownloadCV = async () => {
   try {
     setIsDownloading(true)
-    
-    // Track download ke database
-    try {
-      const tracker = getVisitorTracker()
-      await tracker.trackDownload('CV_Puji_Haryadi.pdf') // Pastikan nama file sama
-      console.log('✅ Download tracked to database')
-    } catch (trackError) {
-      console.warn('⚠️ Could not track download to DB:', trackError)
-    }
-    
-    // Download file
     const link = document.createElement('a')
     link.href = CV_FILE_PATH
     link.download = `${CV_FILE_NAME}.pdf`
@@ -117,7 +111,7 @@ const handleDownloadCV = async () => {
     console.error('Gagal mengunduh CV:', error)
     setIsDownloading(false)
     window.open(CV_FILE_PATH, '_blank')
-    alert('Membuka CV di tab baru... Silakan simpan manual dari browser.')
+    alert('Membuka CV di tab baru...')
   }
 }
 
